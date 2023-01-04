@@ -6,7 +6,7 @@ requests
 ruamel.yaml
 frozendict
 torch_stft
-python-datautil
+python-dateutil
 wrapt
 wget
 kaldi_io
@@ -17,5 +17,4 @@ pyctcdecode
 Flask-SocketIO==4.3.1
 python-engineio==3.13.2
 python-socketio==4.6.0
-Flask==2.0.3
-Werkzeug==2.0.3
+Werkzeug==2.2.2
