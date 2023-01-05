@@ -191,16 +191,24 @@ if __name__=="__main__":
         beam_width=100
     )
 
-    for f in os.listdir(input_dir):
-        if not f.endswith(".wav") and not f.endswith(".mp3"):
-            logger.error(f"{f} format is not supported")
-            continue
-        logger.info("==============================")
-        # audio_signal, sr = sf.read(os.path.join(input_dir, f)) # faster but cant load mp3 or 8k sample rate file
-        audio_signal, sr = librosa.load(os.path.join(input_dir, f), sr=16000)
-#        if len(audio_signal) > 10 * sr:
-#            logger.info("audio file too long, skipped")
-#            continue
-        transcript = vietasr.transcribe(audio_signal)
-        logger.success(f"filename: {f}")
-        logger.success(f"transcript: {transcript}")
+    # logger.info("==============================")
+    audio_signal, sr = librosa.load(input_dir, sr=16000)
+    transcript = vietasr.transcribe(audio_signal)
+    os.system('clear')
+    print(transcript)
+    # logger.success(f"filename: {f}")
+    # logger.success(f"transcript: {transcript}")
+
+#     for f in os.listdir(input_dir):
+#         if not f.endswith(".wav") and not f.endswith(".mp3"):
+#             logger.error(f"{f} format is not supported")
+#             continue
+#         logger.info("==============================")
+#         # audio_signal, sr = sf.read(os.path.join(input_dir, f)) # faster but cant load mp3 or 8k sample rate file
+#         audio_signal, sr = librosa.load(os.path.join(input_dir, f), sr=16000)
+# #        if len(audio_signal) > 10 * sr:
+# #            logger.info("audio file too long, skipped")
+# #            continue
+#         transcript = vietasr.transcribe(audio_signal)
+#         logger.success(f"filename: {f}")
+#         logger.success(f"transcript: {transcript}")
