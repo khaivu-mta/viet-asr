@@ -185,9 +185,26 @@ if __name__=="__main__":
         lm_path=lm_path,
         beam_width=100
     )
-    while True:
-        print("Filename: ")
-        audio_signal, sr = librosa.load(input(), sr=16000)
+    os.system('clear')
+
+    if sys.argv[1]=='0':
+        audio_signal, sr = librosa.load(sys.argv[2], sr=16000)
         transcript = vietasr.transcribe(audio_signal)
         os.system('clear')
         print(transcript)
+        exit()
+
+    if sys.argv[1]=='1':
+        loopWhile = 'continue'
+        while True:
+            try:
+                print('Filename (type quit or exit, to exit): ', end='')
+                loopWhile = input()
+                if loopWhile=='quit' or loopWhile=='exit':
+                    break
+                audio_signal, sr = librosa.load(loopWhile, sr=16000)
+                transcript = vietasr.transcribe(audio_signal)
+                os.system('clear')
+                print(transcript)
+            except:
+                print('')
