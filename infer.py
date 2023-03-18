@@ -185,7 +185,6 @@ if __name__=="__main__":
         lm_path=lm_path,
         beam_width=100
     )
-    os.system('clear')
 
     if sys.argv[1]=='0':
         audio_signal, sr = librosa.load(sys.argv[2], sr=16000)
