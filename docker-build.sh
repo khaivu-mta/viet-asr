@@ -1,0 +1,1 @@
+docker build -t cullen2205/viet-asr -f "Dockerfile" .

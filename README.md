@@ -5,6 +5,15 @@
 
 The pretrained model on this repo was trained with ~100 hours Vietnamese speech dataset, was collected from youtube, radio, call center(8k), text to speech data and some public dataset (vlsp, vivos, fpt). It is very small model (13M parameters) make it inference so fast ⚡  
 
+Docker
+-----------
+```pwsh
+git clone https://github.com/khaivu-mta/viet-asr.git
+cd viet-asr
+docker build -t cullen2205/viet-asr -f "Dockerfile" .
+docker run -it -p 8080:80 -v ${pwd}/settings:/app/settings -v ${pwd}/audio_samples:/app/audio_samples cullen2205/viet-asr
+```
+
 Installation
 ------------
 + Update & install linux libs:

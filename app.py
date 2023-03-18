@@ -1,11 +1,9 @@
 import os
-import requests
 import base64
 import time
 import librosa
 from flask import Flask, redirect, render_template, request, session
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
-# from scipy.io.wavfile import write as write_wav
 from loguru import logger
 
 from infer import VietASR
@@ -24,7 +22,7 @@ vietasr = VietASR(
     encoder_checkpoint=encoder_checkpoint,
     decoder_checkpoint=decoder_checkpoint,
     lm_path=lm_path,
-    beam_width=50
+    beam_width=100
 )
 
 STATIC_DIR = "static"
@@ -63,7 +61,7 @@ def handle_audio_from_client(data):
     decode_string = base64.b64decode(data["audio_base64"].split(",")[1])
     audio_file.write(decode_string)
     logger.info("asr processing...")
-    audio_signal, _ = librosa.load(filepath, sr=16000)
+    audio_signal, sr = librosa.load(filepath, sr=16000)
     transcript = vietasr.transcribe(audio_signal)
     logger.success(f'transcript: {transcript}')
     emit('audio_to_client', {'filepath': filepath, 'transcript': transcript})
@@ -79,7 +77,7 @@ def handle_upload():
         filepath = os.path.join(STATIC_DIR, UPLOAD_DIR, _file.filename)
         _file.save(filepath)
         logger.info(f'saved file to: {filepath}')
-        audio_signal, _ = librosa.load(filepath, sr=16000)
+        audio_signal, sr = librosa.load(filepath, sr=16000)
         transcript = vietasr.transcribe(audio_signal)
         logger.info(f'transcript: {transcript}')
         return render_template(
@@ -91,5 +89,4 @@ def handle_upload():
         return redirect("/")
 
 if __name__ == '__main__':
-    socketio.run(app, host="localhost", port=5000,
-                 ssl_context="adhoc", debug=False)
+    socketio.run(app, host="0.0.0.0", port=80, debug=False)

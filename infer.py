@@ -173,11 +173,6 @@ class VietASR:
 
 if __name__=="__main__":
 
-    input_dir = sys.argv[1]
-    assert os.path.exists(input_dir), f"{input_dir} is not found, try again!"
-    
-    logger.info(f"transcribe audio file in : {input_dir}")
-
     config = 'configs/quartznet12x1_vi.yaml'
     encoder_checkpoint = 'models/acoustic_model/vietnamese/JasperEncoder-STEP-289936.pt'
     decoder_checkpoint = 'models/acoustic_model/vietnamese/JasperDecoderForCTC-STEP-289936.pt'
@@ -191,17 +186,24 @@ if __name__=="__main__":
         beam_width=100
     )
 
-    for f in os.listdir(input_dir):
-        if not f.endswith(".wav") and not f.endswith(".mp3"):
-            logger.error(f"{f} format is not supported")
-            continue
-        logger.info("==============================")
-        # audio_signal, sr = sf.read(os.path.join(input_dir, f)) // faster but cant load mp3 or 8k sample rate file
-        audio_signal, sr = librosa.load(os.path.join(input_dir, f), sr=16000)
-        if len(audio_signal) > 10 * sr:
-            logger.info("audio file too long, skipped")
-            continue
+    if sys.argv[1]=='0':
+        audio_signal, sr = librosa.load(sys.argv[2], sr=16000)
         transcript = vietasr.transcribe(audio_signal)
-        logger.success(f"filename: {f}")
-        logger.success(f"transcript: {transcript}")
-        break
+        os.system('clear')
+        print(transcript)
+        exit()
+
+    if sys.argv[1]=='1':
+        loopWhile = 'continue'
+        while True:
+            try:
+                print('Filename (type quit or exit, to exit): ', end='')
+                loopWhile = input()
+                if loopWhile=='quit' or loopWhile=='exit':
+                    break
+                audio_signal, sr = librosa.load(loopWhile, sr=16000)
+                transcript = vietasr.transcribe(audio_signal)
+                os.system('clear')
+                print(transcript)
+            except:
+                print('')
